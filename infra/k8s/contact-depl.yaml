@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contacts
+  template:
+    metadata:
+      labels:
+        app: contacts
+    spec:
+      containers:
+        - name: contacts
+          image: joanv/contacts
+          env:
+            - name: FIRESTORE_API_KEY
+              value: AIzaSyBxA4rx3N90z546cMSOUJ4Npca0xjf3WNo
+            - name: FIRESTORE_AUTH_DOMAIN
+              value: contacts-app-39271.firebaseapp.com
+            - name: FIRESTORE_DATABASE_URL
+              value: https://contacts-app-39271-default-rtdb.firebaseio.com
+            - name: FIRESTORE_PROJECT_ID
+              value: contacts-app-39271
+            - name: FIRESTORE_STORAGE_BUCKET
+              value: contacts-app-39271.appspot.com
+            - name: FIRESTORE_MESSAGING_SENDER_ID
+              value: "746059794938"
+            - name: FIRESTORE_APP_ID
+              value: 1:746059794938:web:4f7cb177af83c5c6797c4
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contacts-srv
+spec:
+  selector:
+    app: contacts
+  ports:
+    - name: contacts
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
